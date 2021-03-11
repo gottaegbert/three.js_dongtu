@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>three.js webgl - transform controls</title>
+		<meta charset="utf-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
+		/>
+		<link type="text/css" rel="stylesheet" href="main.css" />
+	</head>
+	<body>
+		<style>
+			body {
+				color: #444;
+			}
+			a {
+				color: #08f;
+			}
+		</style>
+
+		<div id="info">
+			"W" translate | "E" rotate | "R" scale | "+/-" adjust size<br />
+			"Q" toggle world/local space | "Shift" snap to grid<br />
+			"X" toggle X | "Y" toggle Y | "Z" toggle Z | "Spacebar" toggle enabled<br />
+			"C" toggle camera | "V" random zoom
+		</div>
+		 <!-- partial:index.partial.html -->
+    <svg
+      width="202px"
+      height="202px"
+      viewBox="0 0 202 202"
+      version="1.1"
+      xmlns="http://www.w3.org/2000/svg"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+    >
+    <path
+    transform="translate(0, 74.01739130434783)"
+    fill="none"
+    d="M7.930-72.070L8-72L15.443-72L21.843-72L22.887-72L29.287-72L36.730-72L36.730-65.600L29.287-65.600L29.287-62.887L30.330-62.887L32.696-62.887L36.730-62.887L36.730-32.417L34.504-32.417L26.296-32.417L26.296-26.017L36.730-26.017L36.730-19.617L26.296-19.617L26.296-7.930L36.730-8.765L36.730-2.365L7.930 0L7.930-6.400L18.296-7.304L18.296-19.687L7.930-19.687L7.930-26.087L18.296-26.087L18.296-32.487L17.530-32.487Q13.565-32.487 10.748-35.304Q7.930-38.122 7.930-42.087L7.930-42.087L7.930-56.557L7.930-62.957L14.330-62.957L15.374-62.957L15.374-65.670L7.930-65.670L7.930-72.070ZM22.887-62.887L22.887-65.600L21.843-65.600L21.843-62.887L22.887-62.887ZM22.887-38.817L22.887-56.487L21.843-56.487L21.843-38.817L22.887-38.817ZM29.287-56.487L29.287-38.817L30.330-38.817L30.330-56.487L29.287-56.487ZM15.443-38.817L15.443-56.487L14.400-56.487L14.400-38.817L15.443-38.817ZM58.435 0L51.130 0Q47.165 0 44.383-2.783L44.383-2.783Q41.530-5.565 41.530-9.600L41.530-9.600L41.530-65.600L39.096-65.600L39.096-72L41.530-72L49.600-72L72-72L72-65.600L49.600-65.600L49.600-59.200L61.287-59.200L69.287-59.200L69.287-9.183Q69.287-4.035 72 0L72 0L63.861 0Q61.287-4.104 61.287-9.183L61.287-9.183L61.287-52.800L49.600-52.800L49.600-6.400L58.435-6.400L58.435 0ZM51.339-21.983L51.339-46.400L57.739-46.400L57.739-21.983Q57.739-16.835 60.452-12.800L60.452-12.800L53.913-12.800Q51.339-16.974 51.339-21.983L51.339-21.983Z"
+  />
+  <path
+    transform="translate(80, 74.01739130434783)"
+    fill="none"
+    d="M22.748-46.330L43.339-46.330L43.339-59.130L22.678-59.130L22.678-65.530L26.435-71.930L35.687-71.930L31.930-65.530L43.339-65.530L43.339-71.930L51.339-71.930L51.339-65.530L72-65.530L72-59.130L51.339-59.130L51.339-46.330L72-46.330L72-39.930L68.035-39.930L68.035-15.165L72-15.165L72-8.765L69.635-8.765Q65.670-8.765 62.852-11.583Q60.035-14.400 60.035-18.365L60.035-18.365L60.035-39.930L51.339-39.930L43.339-39.930L38.261-39.930L31.165-8.765L22.748-8.765L29.774-39.930L22.748-39.930L22.748-46.330ZM18.713 0L18.713-6.330L72-6.330L72 0L18.713 0ZM8-48.765L8-55.165L10.713-55.165L18.713-55.165L18.713-48.765L18.713-9.183Q18.713-4.104 16.209 0L16.209 0L8 0Q10.713-4.035 10.713-9.183L10.713-9.183L10.713-48.765L8-48.765ZM16.209-71.930L21.148-59.130L12.939-59.130L8-71.930L16.209-71.930Z"
+  />
+  <path
+    transform="translate(160, 74.01739130434783)"
+    fill="none"
+    d="M72 0L65.600 0Q61.635 0 58.817-2.817Q56-5.635 56-9.600L56-9.600L56-46.400L64-46.400L64-6.400L72-6.400L72 0ZM45.217-59.130L45.217-71.930L53.217-71.930L53.217-59.130L72-59.130L72-52.800L53.148-52.800L35.061 0L26.435 0L44.522-52.800L26.435-52.800L26.435-59.130L45.217-59.130ZM68.313-68.730L72-62.400L62.748-62.400L59.061-68.730L68.313-68.730ZM23.861-71.930L16.904-46.400L19.965-46.400L19.965 0L11.965 0L11.965-46.400L8-46.400L14.887-71.930L23.861-71.930Z"
+  />
+  <path
+    transform="translate(240, 74.01739130434783)"
+    fill="none"
+    d="M8-29.565L8-35.965L37.983-35.965L37.983-32L37.983-29.565L37.983-6.400L37.983 0L29.983 0L17.600 0Q13.635 0 10.817-2.817Q8-5.635 8-9.600L8-9.600L8-29.565ZM68.035-72L72-72L72-46.400L72-40L17.600-40Q13.635-40 10.817-42.817Q8-45.635 8-49.600L8-49.600L8-65.600L8-72L64-72L68.035-72ZM64-46.400L64-65.600L16-65.600L16-46.400L64-46.400ZM64-6.400L64-29.565L50.017-29.565L50.017-6.400L64-6.400ZM72-29.565L72-6.400L72 0L64 0L51.617 0Q47.652 0 44.835-2.817Q42.017-5.635 42.017-9.600L42.017-9.600L42.017-29.565L42.017-35.965L72-35.965L72-32L72-29.565ZM29.983-6.400L29.983-29.565L16-29.565L16-6.400L29.983-6.400Z"
+  />
+ 
+  <path transform="translate(340.7304347826087, 74.01739130434783)" fill="none" d="M8-59.200L8-65.600L15.722-65.600L11.965-72L21.217-72L24.974-65.600L36.035-65.600L44.035-65.600L56-65.600L59.757-72L68.939-72L65.252-65.600L72-65.600L72-59.200L44.035-59.200L44.035-52.800L69.635-52.800L69.635-46.400L44.035-46.400L44.035-40L72-40L72-33.600L8-33.600L8-40L36.035-40L36.035-46.400L10.435-46.400L10.435-52.800L36.035-52.800L36.035-59.200L8-59.200ZM61.774 0L43.548-16.765L53.774-16.765L72 0L61.774 0ZM40.835-20.800L40.904-20.800L18.226 0L8 0L30.678-20.800L8-20.800L8-27.200L35.965-27.200L35.965-31.165L44.035-31.165L44.035-27.200L72-27.200L72-20.800L40.835-20.800Z" />
+  <path transform="translate(420.7304347826087, 74.01739130434783)" fill="none" d="M64-53.565L72-53.565L72-47.165L72-32.835L72-26.435L64-26.435L16-26.435L16-9.183Q16-4.104 18.713 0L18.713 0L10.574 0Q8-4.243 8-9.183L8-9.183L8-26.435L8-32.835L8-36.800L8-43.200L8-47.165L8-53.565L16-53.565L64-53.565ZM42.783-62.400L46.470-56L37.287-56L33.600-62.400L42.783-62.400ZM15.930-32.835L16-32.835L64-32.835L64-47.165L16-47.165L16-43.200L60.313-43.200L60.313-43.130L56.626-36.800L15.930-36.800L15.930-32.835ZM63.652-56L60.591-65.600L24.557-65.600L24.557-72L58.574-72L63.583-72L66.991-72L72.070-56L63.652-56ZM13.148-72L21.496-72L16.417-56L8-56L13.148-72ZM31.443-17.600L31.443-24L72-24L72-17.600L43.409-17.600L72 0L59.965 0L31.443-17.600Z" />
+  <path transform="translate(500.7304347826087, 74.01739130434783)" fill="none" d="M44.035-30.678L44.035-52.800L52.035-52.800L52.035-30.678L72-30.678L72-24.278L51.061-24.278L19.965 0L8 0L39.096-24.278L8-24.278L8-30.678L44.035-30.678ZM8-52.800L8-59.200L8-65.600L37.217-65.600L33.530-72L42.783-72L46.470-65.600L72-65.600L72-59.200L72-52.800L64-52.800L64-59.200L16-59.200L16-52.800L8-52.800ZM62.052 0L49.113-18.365L58.991-18.365L72 0L62.052 0ZM11.965-35.200L11.965-41.600L40-39.443L40-33.043L11.965-35.200ZM11.965-44.035L11.965-50.365L40-48.209L40-41.809L11.965-44.035Z" />
+  <path transform="translate(580.7304347826087, 74.01739130434783)" fill="none" d="M53.704-65.530L53.704-71.930L58.852-71.930L64.626-71.930L67.270-71.930L72.070-43.965L63.652-43.965L59.965-65.530L53.704-65.530ZM8-12.591L8-18.991L26.435-23.026L26.435-16.626L8-12.591ZM34.365-71.930L34.365-65.530L34.365-48.904Q34.365-43.757 31.861-39.722L31.861-39.722L23.652-39.722Q26.435-43.826 26.435-48.904L26.435-48.904L26.435-65.530L8-65.530L8-71.930L26.435-71.930L34.365-71.930ZM36.800-33.113L36.800-29.357L36.800-9.183Q36.800-4.035 34.226 0L34.226 0L26.087 0Q28.800-4.104 28.800-9.183L28.800-9.183L28.800-29.357L20.035-29.357Q16.070-29.357 13.252-32.174Q10.435-34.991 10.435-38.957L10.435-38.957L10.435-61.565L18.365-61.565L18.365-35.757L36.800-35.757L36.800-33.113ZM42.226-10.365L39.235-39.930L47.374-39.930L50.365-10.365L42.226-10.365ZM51.757-10.365L48.696-39.930L56.904-39.930L59.896-10.365L51.757-10.365ZM72.070-39.930L72-39.930L68.383-6.400L72-6.400L72 0L67.757 0L59.617 0L39.235 0L39.235-6.400L60.313-6.400L63.930-39.930L72.070-39.930ZM43.896-71.930L52.313-71.930L47.513-43.965L39.096-43.965L43.896-71.930ZM49.739-43.965L49.739-50.365L61.287-50.365L61.287-43.965L49.739-43.965Z" />
+  <path transform="translate(660.7304347826087, 74.01739130434783)" fill="none" d="M68.035-31.583L68.035-27.965L65.530-27.965L60.035-27.965L44.035-27.965L44.035-21.217L68.035-21.217L68.035-14.817L44.035-14.817L44.035-6.400L72-6.400L72 0L8 0L8-6.400L36.035-6.400L36.035-14.817L12.035-14.817L12.035-21.217L36.035-21.217L36.035-27.965L12.035-27.965L12.035-34.365L16.070-43.200L12.035-43.200L12.035-49.600L68.035-49.600L68.035-43.200L25.322-43.200L21.217-34.365L59.757-34.365Q59.200-37.913 57.322-40.765L57.322-40.765L65.461-40.765Q68.035-36.661 68.035-31.583L68.035-31.583ZM8-52.800L8-59.200L8-65.600L37.217-65.600L33.530-72L42.783-72L46.470-65.600L72-65.600L72-59.200L72-52.800L64-52.800L64-59.200L16-59.200L16-52.800L8-52.800Z" /></g>
+ 
+    </svg>
+
+	<!-- <script type="x-shader/x-vertex" id="vertexShader">
+
+			varying vec3 vWorldPosition;
+
+			void main() {
+
+				vec4 worldPosition = modelMatrix * vec4( position, 1.0 );
+				vWorldPosition = worldPosition.xyz;
+
+				gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+
+			}
+
+		</script>
+
+		<script type="x-shader/x-fragment" id="fragmentShader">
+
+			uniform vec3 topColor;
+			uniform vec3 bottomColor;
+			uniform float offset;
+			uniform float exponent;
+
+			varying vec3 vWorldPosition;
+
+			void main() {
+
+				float h = normalize( vWorldPosition + offset ).y;
+				gl_FragColor = vec4( mix( bottomColor, topColor, max( pow( max( h , 0.0), exponent ), 0.0 ) ), 1.0 );
+
+			}
+
+		</script> -->
+
+
+
+
+		
+
+		<script type="module">
+			
+			import * as THREE from "../build/three.module.js";
+
+			import { OrbitControls } from "./jsm/controls/OrbitControls.js";
+			import { TransformControls } from "./jsm/controls/TransformControls.js";
+			import { SVGLoader } from './jsm/loaders/SVGLoader.js';
+			//import { GLTFLoader } from './jsm/loaders/GLTFLoader.js';
+
+			let cameraPersp, cameraOrtho, currentCamera;
+			let scene, renderer, control, orbit;
+
+			init();
+			render();
+
+			document.querySelector("body").appendChild(renderer.domElement);
+
+			function init() {
+				renderer = new THREE.WebGLRenderer();
+				renderer.setPixelRatio(window.devicePixelRatio);
+				renderer.setSize(window.innerWidth, window.innerHeight);
+				document.body.appendChild(renderer.domElement);
+
+				const aspect = window.innerWidth / window.innerHeight;
+
+				cameraPersp = new THREE.PerspectiveCamera(50, aspect, 0.01, 30000);
+				cameraOrtho = new THREE.OrthographicCamera(
+					-600 * aspect,
+					600 * aspect,
+					600,
+					-600,
+					0.01,
+					30000
+				);
+				currentCamera = cameraPersp;
+
+				currentCamera.position.set(1000, 500, 1000);
+				currentCamera.lookAt(0, 200, 0);
+
+				scene = new THREE.Scene();
+
+				scene.add(new THREE.GridHelper(1000, 10, 0x888888, 0x444444));
+				// scene.background = new THREE.Color( 0xeeeeee );
+				scene.background = new THREE.CubeTextureLoader()
+					.setPath( 'textures/cube/Park3Med/' )
+					.load( [ 'px.jpg', 'nx.jpg', 'py.jpg', 'ny.jpg', 'pz.jpg', 'nz.jpg' ] );
+
+				const light = new THREE.DirectionalLight(0xffffff, 2);
+				light.position.set(1, 1, 1);
+				scene.add(light);
+
+				const texture_1 = new THREE.TextureLoader().load(
+					"textures/crate.gif",
+					render
+				);//0.木纹
+				const texture = new THREE.Texture( generateTexture() );
+				texture.needsUpdate = true;
+				texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
+
+				const material = new THREE.MeshLambertMaterial({
+					map: texture,
+					transparent: true,
+				});
+				
+				const material_1 = new THREE.MeshBasicMaterial( { color: 0xffaa00, wireframe: true } );//1.线框
+
+				const material_2 = new THREE.MeshPhongMaterial( { color: 0xdddddd, specular: 0x009900, shininess: 30, flatShading: true } ) ; // 2.黑白材质
+
+				const material_3 = new THREE.MeshBasicMaterial( { color: 0xffaa00, transparent: true, blending: THREE.AdditiveBlending } ) ;// 3.透明黄色发光
+
+				const material_4 = new THREE.MeshPhongMaterial( { color: 0x000000, specular: 0x666666, emissive: 0xff0000, shininess: 10, opacity: 0.9, transparent: true } );//4.红色光泽
+
+				const material_5 =new THREE.MeshLambertMaterial( { color: 0x666666, emissive: 0xff0000 } ); //5.红色发光
+
+				const material_6 = new THREE.MeshPhongMaterial( { color: 0xdddddd, specular: 0x009900, shininess: 30, map: texture_1, transparent: false } ) //6.绿色光泽
+
+				const material_7 = new THREE.MeshPhongMaterial( { color: 0xdddddd, specular: 0x009900, shininess: 30, map: texture, transparent: false } ) //6.透明光泽/黑白漫画（transparent：false）
+
+				const material_8 =new THREE.MeshBasicMaterial( { map: texture, transparent: false } ) //-[]没跑通texture的动画效果！
+
+				const cubematerial_1 =new THREE.MeshLambertMaterial( { color: 0xff6600, combine: THREE.MixOperation, reflectivity: 0.3 } );
+
+
+				//待开发 投影效果 动画效果 赛博朋克打光  材质
+
+
+				//#region svg extrude
+				// Axes helper
+				const axesHelper = new THREE.AxesHelper(500);
+				scene.add(axesHelper);
+
+				//const geometry = new THREE.BoxGeometry(100, 200, 200);
+				const svgMarkup = document.querySelector("svg").outerHTML;
+
+				// SVG Loader is not a part of the main three.js bundle
+				// We need to load it separately, it is included in this pen's Settings > JavaScript
+				// https://threejs.org/docs/#examples/en/loaders/SVGLoader
+				const loader = new SVGLoader();
+				const svgData = loader.parse(svgMarkup);
+
+				// Group we'll use for all SVG paths
+				const svgGroup = new THREE.Group();
+				// When importing SVGs paths are inverted on Y axis
+				// it happens in the process of mapping from 2d to 3d coordinate system
+				svgGroup.scale.y *= -1;
+
+				// const start = new THREE.Vector3(20, 10, 0);
+				// const end = new THREE.Vector3(200, 100, 0);
+				// const line  = new THREE.Line3(start, end);
+			    // scene.add(line);
+							
+
+			
+
+				const closedSpline = new THREE.CatmullRomCurve3( [
+					new THREE.Vector3( 0, 0, 0 ),
+					new THREE.Vector3( 34, -2, -2 )
+					
+				] );
+
+				closedSpline.curveType = 'catmullrom';
+				closedSpline.closed = true;
+
+				const curve = new THREE.SplineCurve( [
+					new THREE.Vector2( -10, 0 ),
+					new THREE.Vector2( -5, 5 ),
+					new THREE.Vector2( 0, 0 ),
+					new THREE.Vector2( 5, -5 ),
+					new THREE.Vector2( 10, 0 )
+				] );
+		
+				svgData.paths.forEach((path, i) => {
+					const shapes = path.toShapes(true);
+
+
+					// Each path has array of shapes
+					shapes.forEach((shape, j) => {
+						// Finally we can take each shape and extrude it
+						const geometry = new THREE.ExtrudeGeometry(shape, {
+							steps: 100,
+							bevelEnabled: false,
+							extrudePath: closedSpline
+						});
+
+						// Create a mesh and add it to the group
+						const mesh = new THREE.Mesh(geometry, material_6);
+
+						svgGroup.add(mesh);
+					});
+				});
+
+				// Meshes we got are all relative to themselves
+				// meaning they have position set to (0, 0, 0)
+				// which makes centering them in the group easy
+
+				// Get group's size
+				const box = new THREE.Box3().setFromObject(svgGroup);
+				const size = new THREE.Vector3();
+				box.getSize(size);
+
+				const yOffset = size.y / -2;
+				const xOffset = size.x / -2;
+
+				// Offset all of group's elements, to center them
+				svgGroup.children.forEach((item) => {
+					item.position.x = xOffset;
+					item.position.y = yOffset;
+				});
+
+				// Finally we add svg group to the scene
+				//scene.add(svgGroup);
+				//#endregion svg extrude
+
+
+
+				orbit = new OrbitControls(currentCamera, renderer.domElement);
+				orbit.update();
+				orbit.addEventListener("change", render);
+
+				control = new TransformControls(currentCamera, renderer.domElement);
+				control.addEventListener("change", render);
+
+				control.addEventListener("dragging-changed", function (event) {
+					orbit.enabled = !event.value;
+				});
+
+				//const mesh = new THREE.Mesh(geometry, material);
+				scene.add(svgGroup);
+
+				control.attach(svgGroup);
+				scene.add(control);
+
+				window.addEventListener("resize", onWindowResize);
+
+				window.addEventListener("keydown", function (event) {
+					switch (event.keyCode) {
+						case 81: // Q
+							control.setSpace(control.space === "local" ? "world" : "local");
+							break;
+
+						case 16: // Shift
+							control.setTranslationSnap(100);
+							control.setRotationSnap(THREE.MathUtils.degToRad(15));
+							control.setScaleSnap(0.25);
+							break;
+
+						case 87: // W
+							control.setMode("translate");
+							break;
+
+						case 69: // E
+							control.setMode("rotate");
+							break;
+
+						case 82: // R
+							control.setMode("scale");
+							break;
+
+						case 67: // C
+							const position = currentCamera.position.clone();
+
+							currentCamera = currentCamera.isPerspectiveCamera
+								? cameraOrtho
+								: cameraPersp;
+							currentCamera.position.copy(position);
+
+							orbit.object = currentCamera;
+							control.camera = currentCamera;
+
+							currentCamera.lookAt(
+								orbit.target.x,
+								orbit.target.y,
+								orbit.target.z
+							);
+							onWindowResize();
+							break;
+
+						case 86: // V
+							const randomFoV = Math.random() + 0.1;
+							const randomZoom = Math.random() + 0.1;
+
+							cameraPersp.fov = randomFoV * 160;
+							cameraOrtho.bottom = -randomFoV * 500;
+							cameraOrtho.top = randomFoV * 500;
+
+							cameraPersp.zoom = randomZoom * 5;
+							cameraOrtho.zoom = randomZoom * 5;
+							onWindowResize();
+							break;
+
+						case 187:
+						case 107: // +, =, num+
+							control.setSize(control.size + 0.1);
+							break;
+
+						case 189:
+						case 109: // -, _, num-
+							control.setSize(Math.max(control.size - 0.1, 0.1));
+							break;
+
+						case 88: // X
+							control.showX = !control.showX;
+							break;
+
+						case 89: // Y
+							control.showY = !control.showY;
+							break;
+
+						case 90: // Z
+							control.showZ = !control.showZ;
+							break;
+
+						case 32: // Spacebar
+							control.enabled = !control.enabled;
+							break;
+					}
+				});
+
+				window.addEventListener("keyup", function (event) {
+					switch (event.keyCode) {
+						case 16: // Shift
+							control.setTranslationSnap(null);
+							control.setRotationSnap(null);
+							control.setScaleSnap(null);
+							break;
+					}
+				});
+			}
+			function generateTexture() {
+
+				const canvas = document.createElement( 'canvas' );
+				canvas.width = 256;
+				canvas.height = 256;
+
+				const context = canvas.getContext( '2d' );
+				const image = context.getImageData( 0, 0, 256, 256 );
+
+				let x = 0, y = 0;
+
+				for ( let i = 0, j = 0, l = image.data.length; i < l; i += 4, j ++ ) {
+
+					x = j % 256;
+					y = ( x === 0 ) ? y + 1 : y;
+
+					image.data[ i ] = 255;
+					image.data[ i + 1 ] = 255;
+					image.data[ i + 2 ] = 255;
+					image.data[ i + 3 ] = Math.floor( x ^ y );
+
+				}
+
+				context.putImageData( image, 0, 0 );
+
+				return canvas;
+
+			}
+
+				
+
+
+			function onWindowResize() {
+				const aspect = window.innerWidth / window.innerHeight;
+
+				cameraPersp.aspect = aspect;
+				cameraPersp.updateProjectionMatrix();
+
+				cameraOrtho.left = cameraOrtho.bottom * aspect;
+				cameraOrtho.right = cameraOrtho.top * aspect;
+				cameraOrtho.updateProjectionMatrix();
+
+				renderer.setSize(window.innerWidth, window.innerHeight);
+
+				render();
+			}
+			function animate() {
+
+				requestAnimationFrame( animate );
+
+				render();
+				stats.update();
+
+			}
+
+			function render() {
+				renderer.render(scene, currentCamera);
+				const timer = 0.0001 * Date.now();
+				// materials[ materials.length - 2 ].emissive.setHSL( 0.54, 1, 0.35 * ( 0.5 + 0.5 * Math.sin( 35 * timer ) ) );
+				// materials[ materials.length - 3 ].emissive.setHSL( 0.04, 1, 0.35 * ( 0.5 + 0.5 * Math.cos( 35 * timer ) ) );
+			}
+		</script>
+	</body>
+</html>
